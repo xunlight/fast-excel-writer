@@ -53,6 +53,8 @@ class Sheet
 
     public $autoFilter = null;
     public string $absoluteAutoFilter = '';
+    
+    public $filter = null;
 
     // ZERO based
     public array $colWidths = [];
@@ -379,6 +381,19 @@ class Sheet
         }
         $this->absoluteAutoFilter = Excel::cellAddress($row, $col, true);
 
+        return $this;
+    }
+    
+    /**
+     * Set filter for selected sheet
+     *
+     * @param array $filter
+     *
+     * @return $this
+     */
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
         return $this;
     }
 
