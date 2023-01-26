@@ -1222,6 +1222,19 @@ class Sheet
         else {
             $cellStyles = null;
         }
+        //hide rows without filter value
+        
+        //filter values by filter
+        if(!empty($this->filter)){
+            foreach($this->filter as $key=>$value){
+                if((isset($row[$key]))&&($row[$key]!='')&&($row[$key]!=$value)){
+                    $rowStyle['hidden'] = true;
+                    break;
+                }
+            }
+        }
+        
+
         $this->_writeRow($writer, $row, $rowStyle, $cellStyles);
         $this->currentCol = Excel::MIN_COL;
 
