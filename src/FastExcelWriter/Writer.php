@@ -362,7 +362,18 @@ class Writer
         if ($sheet->autoFilter) {
             $minCell = $sheet->autoFilter;
             $maxCell = Excel::cellAddress($sheet->rowCount, $sheet->colCount);
-            $sheet->fileWriter->write('<autoFilter ref="' . $minCell . ':' . $maxCell . '"/>');
+            
+            //using filter
+            $useFilter = !empty($sheet->filter);
+            if($useFilter){
+                $filter = '';
+                foreach( $sheet->filter as $colId=>$filterVal ){
+                    $filter .= '<filterColumn colId="' . $colId . '"><filters><filter val="' . $filterVal . '"/></filters></filterColumn>';
+                }
+                $sheet->fileWriter->write('<autoFilter ref="' . $minCell . ':' . $maxCell . '">' . $filter . '</autoFilter>');
+            }
+            else
+                $sheet->fileWriter->write('<autoFilter ref="' . $minCell . ':' . $maxCell . '"/>');
         }
 
         $pageSetupAttr = 'orientation="' . $sheet->getPageOrientation() . '"';
