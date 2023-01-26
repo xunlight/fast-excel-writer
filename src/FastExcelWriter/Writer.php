@@ -264,7 +264,11 @@ class Writer
         $xmlns = implode(' ', $xmlnsLinks);
         $fileWriter->write('<worksheet ' . $xmlns . '>');
 
-        $fileWriter->write('<sheetPr>');
+        if ($sheet->autoFilter)
+            $fileWriter->write('<sheetPr filterMode="1">');
+        else
+            $fileWriter->write('<sheetPr>');
+            
         if ($sheet->getPageFit()) {
             $fileWriter->write('<pageSetUpPr fitToPage="1"/>');
         } else {
@@ -368,9 +372,9 @@ class Writer
             if($useFilter){
                 $filter = '';
                 foreach( $sheet->filter as $colId=>$filterVal ){
-                    $filter .= '<filterColumn colId="' . $colId . '"><filters><filter val="' . $filterVal . '"/></filters></filterColumn>';
+                    $filter .= '<filterColumn colId="' . $colId . '"><filters blank="1"><filter val="' . $filterVal . '"/></filters></filterColumn>';
                 }
-                $sheet->fileWriter->write('<autoFilter ref="' . $minCell . ':' . $maxCell . '">' . $filter . '</autoFilter>');
+                $sheet->fileWriter->write('<autoFilter ref="' . $minCell . ':' . $maxCell . '" xr:uid="{00000000-0009-0000-0000-000000000000}">' . $filter . '</autoFilter>');
             }
             else
                 $sheet->fileWriter->write('<autoFilter ref="' . $minCell . ':' . $maxCell . '"/>');
